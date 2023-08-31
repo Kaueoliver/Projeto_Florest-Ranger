@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
 
-    public float speed = 5f;
-    public float jumpForce = 10f;
-
-    private Rigidbody2D rig;
+    [SerializeField]private float speed = 2f;
+    [SerializeField] private float jumpForce = 10f;
     [SerializeField] private LayerMask Ground;
+
     private Collider2D coll;
     private Animator anim;
+    private Rigidbody2D rig;
+    [SerializeField] private int cherries = 0;
+    //[SerializeField] private TextMeshProUGUI cherryText;
+
+
+    private enum State { idle,walk,Jump, cair,hurt }
+    private State state = State.idle;
+
+
 
 
     // Start is called before the first frame update
@@ -26,47 +35,141 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        move();
-        jump();
-      
-    }
-
-    private void move()
-    {
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
-        transform.position += movement * Time.deltaTime * speed;
-
-        if (Input.GetAxis("Horizontal") > 0f)
+        //move();
+        //jump();
+        if (state != State.hurt)
         {
-            transform.eulerAngles = new Vector3(0f, 0f, 0f);
-            anim.SetBool("walk", true);
-
+            Movement();
         }
 
-        if (Input.GetAxis("Horizontal") < 0f)
-        {
-            transform.eulerAngles = new Vector3(0f, 180f, 0f);
-            anim.SetBool("walk", true);
-        }
-
-        if (Input.GetAxis("Horizontal") == 0f)
-        {
-            transform.eulerAngles = new Vector3(0f, 0f, 0f);
-            anim.SetBool("walk", false);
-        }
+        AnimationState();
+        anim.SetInteger("state", (int)state);
 
 
     }
-
-    private void jump()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.tag == "Coletável" )
+        {
+            
+            Destroy(collision.gameObject);
+            cherries += 1;
+           
+            //cherryText.text = cherries.ToString();
+        }
+    }
+
+
+
+
+
+    private void Movement()
+    {
+        float hDirection = Input.GetAxis("Horizontal");
+
+        //Mover para a esquerda
+        if (hDirection < 0)
+        {
+            rig.velocity = new Vector2(-speed, rig.velocity.y);
+            transform.localScale = new Vector2(-1, 1);
+        }
+        //Mover Para a direita
+        else if (hDirection > 0)
+        {
+            rig.velocity = new Vector2(speed, rig.velocity.y);
+            transform.localScale = new Vector2(1, 1);
+        }
+        //Jump
         if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(Ground))
         {
-            rig.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
-            
-
+            Jump();
         }
 
+
+
     }
-   
+
+    private void Jump()
+    {
+        rig.velocity = new Vector2(rig.velocity.x, jumpForce);
+        state = State.Jump;
+    }
+
+    private void AnimationState()
+    {
+        if (state == State.Jump)
+        {
+            if (rig.velocity.y < .1f)
+            {
+                state = State.cair;
+            }
+        }
+        else if (state == State.cair)
+        {
+            if (coll.IsTouchingLayers(Ground))
+            {
+                state = State.idle;
+            }
+        }
+        else if (state == State.hurt)
+        {
+            if (Mathf.Abs(rig.velocity.x) < .1f)
+            {
+                state = State.idle;
+            }
+        }
+        else if (Mathf.Abs(rig.velocity.x) > 2f)
+        {
+            state = State.walk;
+        }
+        else
+        {
+            state = State.idle;
+        }
+    }
+
+    //private void move()
+    //{
+    //Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
+    //transform.position += movement * Time.deltaTime * speed;
+
+    //if (Input.GetAxis("Horizontal") > 0f)
+    //{
+    //transform.eulerAngles = new Vector3(0f, 0f, 0f);
+    // anim.SetBool("walk", true);
+
+    //}
+
+    // if (Input.GetAxis("Horizontal") < 0f)
+    // {
+    // transform.eulerAngles = new Vector3(0f, 180f, 0f);
+    //anim.SetBool("walk", true);
+    // }
+
+    //if (Input.GetAxis("Horizontal") == 0f)
+    // {
+    //transform.eulerAngles = new Vector3(0f, 0f, 0f);
+    //   anim.SetBool("walk", false);
+    // }
+
+
+    //}
+
+    //private void jump()
+    //{
+    //if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(Ground))
+    //{
+    //rig.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+
+
+
+    // }
+
+    // }
+
+
 }
+
+
+
+
