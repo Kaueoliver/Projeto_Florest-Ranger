@@ -86,6 +86,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private bool isGrounded() 
+    {
+        RaycastHit2D ground = Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0, Vector2.down, 0.1f, Ground);
+        return ground.collider != null;
+    }
 
 
 
@@ -108,7 +113,7 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector2(1, 1);
         }
         //Jump
-        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(Ground))
+        if (Input.GetButtonDown("Jump") && isGrounded())
         {
             Jump();
         }
@@ -134,7 +139,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (state == State.cair)
         {
-            if (coll.IsTouchingLayers(Ground))
+            if (isGrounded())
             {
                 state = State.idle;
             }
@@ -194,6 +199,7 @@ public class PlayerController : MonoBehaviour
     // }
 
     // }
+
 
 
 }
