@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.Tilemaps;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,14 +14,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private float speed = 2f;
     [SerializeField]private float jumpForce = 10f;
     [SerializeField]private LayerMask Ground;
-    [SerializeField] private float hurtForce = 10f;
+    [SerializeField]private float hurtForce = 10f;
+    
+    
+    
 
+    
     private Collider2D coll;
     private Animator anim;
     private Rigidbody2D rig;
-    [SerializeField] private int cherries = 0;
-    [SerializeField] private TextMeshProUGUI cherryText;
-
+    
 
     private enum State { idle,walk,Jump, cair, hurt }
     private State state = State.idle;
@@ -31,6 +37,8 @@ public class PlayerController : MonoBehaviour
         rig = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
+        
+        
     }
 
     // Update is called once per frame
@@ -48,18 +56,8 @@ public class PlayerController : MonoBehaviour
 
 
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Coletável" )
-        {
-            
-            Destroy(collision.gameObject);
-            cherries += 1;
-           
-            cherryText.text = cherries.ToString();
-            Debug.Log(cherryText.text);
-        }
-    }
+    
+    
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -73,7 +71,7 @@ public class PlayerController : MonoBehaviour
             else 
             {
                 state = State.hurt;
-
+                
                 if(other.gameObject.transform.position.x > transform.position.x) 
                 {
                     rig.velocity = new Vector2(-hurtForce, rig.velocity.y);
@@ -85,6 +83,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    
 
     private bool isGrounded() 
     {
@@ -160,6 +159,7 @@ public class PlayerController : MonoBehaviour
             state = State.idle;
         }
     }
+    
 
     //private void move()
     //{

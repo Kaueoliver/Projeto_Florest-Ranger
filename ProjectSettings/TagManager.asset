@@ -6,6 +6,7 @@ TagManager:
   tags:
   - "Colet\xE1vel"
   - Enemy
+  - Segundo
   layers:
   - Default
   - TransparentFX
@@ -54,4 +55,7 @@ TagManager:
     locked: 0
   - name: Fore
     uniqueID: 3824974939
+    locked: 0
+  - name: Text
+    uniqueID: 3217315205
     locked: 0
