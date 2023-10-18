@@ -8,46 +8,65 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float leftCap;
     [SerializeField] private float rightCap;
 
-    [SerializeField] private float jumpLenght;
-    [SerializeField] private float jumpHeight;
+    [SerializeField] private float jumpLenght = 10f;
+    [SerializeField] private float jumpHeight = 15f;
     [SerializeField] private LayerMask ground;
+    private Animator animator;
 
     private Collider2D rd;
-    private Rigidbody bd;
+    private Rigidbody2D bd;
 
     private bool facingLeft = true;
     // Start is called before the first frame update
     private void Start()
     {
         rd = GetComponent<Collider2D>();
-        bd = GetComponent<Rigidbody>();
+        bd = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (facingLeft) 
+        if (animator.GetBool("Jump")) 
         {
-            if(transform.position.x > leftCap) 
+            if(bd.velocity.y < .1) 
             {
-                if(transform.localScale.x != 1)     
+                animator.SetBool("Cair", true);
+                animator.SetBool("Jump", false);
+            }
+        }
+        if(rd.IsTouchingLayers(ground) && animator.GetBool("Cair")) 
+        {
+            animator.SetBool("Cair", false);
+        }
+        Move();
+    }
+    private void Move() 
+    {
+        if (facingLeft)
+        {
+            if (transform.position.x > leftCap)
+            {
+                if (transform.localScale.x != 1)
                 {
                     transform.localScale = new Vector3(1, 1);
 
                 }
-                if (rd.IsTouchingLayers(ground)) 
+                if (rd.IsTouchingLayers(ground))
                 {
                     bd.velocity = new Vector2(-jumpLenght, jumpHeight);
+                    animator.SetBool("Jump", true);
                 }
             }
-            else 
+            else
             {
                 facingLeft = false;
             }
         }
-        else 
+        else
         {
-            if (transform.position.x > rightCap)
+            if (transform.position.x < rightCap)
             {
                 if (transform.localScale.x != -1)
                 {
@@ -57,6 +76,7 @@ public class Enemy : MonoBehaviour
                 if (rd.IsTouchingLayers(ground))
                 {
                     bd.velocity = new Vector2(jumpLenght, jumpHeight);
+                    animator.SetBool("Jump", true);
                 }
             }
             else
@@ -64,5 +84,6 @@ public class Enemy : MonoBehaviour
                 facingLeft = true;
             }
         }
+
     }
 }
