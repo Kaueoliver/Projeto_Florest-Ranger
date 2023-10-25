@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,11 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private float jumpForce = 10f;
     [SerializeField]private LayerMask Ground;
     [SerializeField]private float hurtForce = 10f;
-    
-    
-    
-
-    
+   
     private Collider2D coll;
     private Animator anim;
     private Rigidbody2D rig;
@@ -71,14 +64,17 @@ public class PlayerController : MonoBehaviour
             else 
             {
                 state = State.hurt;
+
                 
-                if(other.gameObject.transform.position.x > transform.position.x) 
+                if (other.gameObject.transform.position.x > transform.position.x) 
                 {
                     rig.velocity = new Vector2(-hurtForce, rig.velocity.y);
+                   
                 }
                 else 
                 {
                     rig.velocity = new Vector2(hurtForce, rig.velocity.y);
+                    
                 }
             }
         }
@@ -95,7 +91,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private void Movement()
+    public void Movement()
     {
         float hDirection = Input.GetAxis("Horizontal");
 
@@ -121,13 +117,13 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void Jump()
+    public void Jump()
     {
         rig.velocity = new Vector2(rig.velocity.x, jumpForce);
         state = State.Jump;
     }
 
-    private void AnimationState()
+    public void AnimationState()
     {
         if (state == State.Jump)
         {

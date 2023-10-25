@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
         rd = GetComponent<Collider2D>();
         bd = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-    }
+    }   
 
     // Update is called once per frame
     private void Update()
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
         {
             animator.SetBool("Cair", false);
         }
-        Move();
+            Move();
     }
     private void Move() 
     {
