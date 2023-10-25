@@ -11,14 +11,21 @@ public class Fruta : MonoBehaviour
     [SerializeField] public TMP_Text healthDisplay;
     [SerializeField] private GameObject gameOver;
     [SerializeField] public int health;
+   
+   
 
-    private enum State { idle, walk, Jump, cair, hurt }
+
+
+ 
+
+
+    private enum State { idle,  cair,  }
     private State state = State.idle;
     // Start is called before the first frame update
     void Start()
     {
-        
-        
+       
+       
     }
          
 
@@ -41,7 +48,7 @@ public class Fruta : MonoBehaviour
             Debug.Log(cherryText.text);
         }
     }
-    private void HandleHealth()
+    public void HandleHealth()
     {
         health --;
         healthDisplay.text = "Vida: " + health;
@@ -49,26 +56,45 @@ public class Fruta : MonoBehaviour
         {
             AbrirGameOver();
         }
+       
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
+       
         if (other.gameObject.tag == "Enemy")
         {
+            
             if (state == State.cair)
             {
-               
+              
+              Destroy (other.gameObject);
+              
             }
             else
             {
                 
-                HandleHealth();
                 
+
+                if (other.gameObject.transform.position.x > transform.position.x)
+                {
+                    
+                    HandleHealth();
+                }
+                else
+                {
+                   
+                    HandleHealth();
+
+                }
             }
         }
     }
+
+
     public void AbrirGameOver()
     {
         gameOver.SetActive(true);
-        GetComponent<PlayerController>().enabled = false;
+        Destroy(gameObject);
     }
+
 }
