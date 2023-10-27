@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4617862377842971137}
   - component: {fileID: 9205363485270105784}
   - component: {fileID: 4039959764266919833}
+  - component: {fileID: 2363799126506779748}
   m_Layer: 0
   m_Name: Inimigo
   m_TagString: Enemy
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2815184125211546028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 52.51, y: 1.98, z: 6.1277294}
+  m_LocalPosition: {x: 52.03, y: 4.08, z: 6.1277294}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -173,8 +174,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftCap: 44.55
   rightCap: 59.88
-  jumpLenght: 3
-  jumpHeight: 4
+  jumpLenght: 5
+  jumpHeight: 6
   ground:
     serializedVersion: 2
     m_Bits: 8
+--- !u!95 &2363799126506779748
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2815184125211546028}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 965e0f314868db7459bd29b788b20463, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
